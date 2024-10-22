@@ -4,6 +4,13 @@ import withReactContent from 'sweetalert2-react-content'
 
 const MySwal = withReactContent(Swal)
 
+const defeatModal = () => {
+  return MySwal.fire({
+    icon: 'error',
+    title: <p>패배</p>,
+  })
+}
+
 const initialBoard = [
   ['🎈', '🎈', '', '', '', '🎈'],
   ['', '', '🎈', '', '🎈', '🎈'],
@@ -67,27 +74,22 @@ const Game = () => {
   }
 
   const handleClick = (rowIdx: number, colIdx: number) => {
-    const allGroups = findGroup()
+    const allGroups = findGroups()
+
     if (board[rowIdx][colIdx] === '🎈') {
       const clickedGroup = bfs([rowIdx, colIdx], false)
 
       if (allGroups[0].length === clickedGroup.length) {
         bfs([rowIdx, colIdx], true)
       } else {
-        MySwal.fire({
-          icon: 'error',
-          title: <p>패배</p>,
-        })
+        defeatModal()
       }
     } else {
-      MySwal.fire({
-        icon: 'error',
-        title: <p>패배</p>,
-      })
+      defeatModal()
     }
   }
 
-  const findGroup = () => {
+  const findGroups = () => {
     const visited = Array.from({ length: board.length }, () =>
       Array(board[0].length).fill(false)
     )
